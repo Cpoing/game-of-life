@@ -69,6 +69,7 @@ func countNeighbors(grid Grid, x, y int) int {
 
 func gridToString(grid Grid) string {
 	var sb strings.Builder
+  sb.WriteString("\033[H\033[2J")
 	for _, row := range grid {
 		for _, cell := range row {
 			if cell {
@@ -81,6 +82,8 @@ func gridToString(grid Grid) string {
 	}
 	return sb.String()
 }
+
+// send frames to tcp server and loop broadcast every frame recieved from producer
 
 func main() {
 	conn, err := net.Dial("tcp", "localhost:8080")
@@ -95,7 +98,7 @@ func main() {
 
 	for {
 		frame := gridToString(grid)
-		fmt.Fprint(conn, frame)
+    fmt.Println(frame)
 		time.Sleep(200 * time.Millisecond)
 		grid = nextGeneration(grid)
 	}
